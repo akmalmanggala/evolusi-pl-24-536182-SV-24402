@@ -12,6 +12,27 @@ on:
       - dev
 
 jobs:
+  # JOB 0: Lint Code Style (Memenuhi Branch Protection Ruleset Pertemuan 2)
+  lint-code:
+    name: Code Style (Pint)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup PHP Runtime
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.2"
+          extensions: mbstring, dom, fileinfo, sqlite, pdo_sqlite
+          coverage: none
+
+      - name: Install Composer Dependencies
+        run: composer install --no-interaction --prefer-dist --optimize-autoloader
+
+      - name: Run Laravel Pint Lint Check
+        run: vendor/bin/pint --test
+
   # JOB 1: Build Application
   build:
     name: Build (Composer Install)
@@ -30,9 +51,9 @@ jobs:
       - name: Install Composer Dependencies
         run: composer install --no-interaction --prefer-dist --optimize-autoloader
 
-  # JOB 2: Automated Testing
+  # JOB 2: Automated Testing (Memenuhi Branch Protection Ruleset Pertemuan 2 & Pertemuan 3)
   test:
-    name: Test (Automated Tests)
+    name: Automated Tests (PHPUnit)
     needs: [build]
     runs-on: ubuntu-latest
     steps:

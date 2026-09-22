@@ -37,7 +37,7 @@ class TaskTest extends TestCase
             'description' => 'Contoh deskripsi',
         ]);
 
-        $response = $this->delete('/tasks/' . $task->id);
+        $response = $this->delete('/tasks/'.$task->id);
 
         $response->assertRedirect('/tasks');
         $this->assertDatabaseMissing('tasks', [
