@@ -13,7 +13,7 @@ class TaskTest extends TestCase
     public function test_halaman_tasks_dapat_diakses(): void
     {
         $response = $this->get('/tasks');
-        $response->assertStatus(500); // SENGAJA DIGAGALKAN (Aslinya 200)
+        $response->assertStatus(200);
         $response->assertSee('Manajemen Tugas');
     }
 
