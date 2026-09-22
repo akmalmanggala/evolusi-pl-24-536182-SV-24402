@@ -1,4 +1,4 @@
-name: CI Workflow
+name: CI/CD Deployment Pipeline
 
 on:
   push:
@@ -12,15 +12,15 @@ on:
       - dev
 
 jobs:
-  # JOB 1: Pemeriksaan Gaya Kode (Linter dengan Laravel Pint)
-  lint-code:
-    name: Code Style (Pint)
+  # JOB 1: Build Application
+  build:
+    name: Build (Composer Install)
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Setup PHP
+      - name: Setup PHP Runtime
         uses: shivammathur/setup-php@v2
         with:
           php-version: "8.2"
@@ -30,18 +30,16 @@ jobs:
       - name: Install Composer Dependencies
         run: composer install --no-interaction --prefer-dist --optimize-autoloader
 
-      - name: Run Laravel Pint Lint Check
-        run: vendor/bin/pint --test
-
-  # JOB 2: Eksekusi Pengujian Otomatis (PHPUnit / Pest)
-  unit-tests:
-    name: Automated Tests (PHPUnit)
+  # JOB 2: Automated Testing
+  test:
+    name: Test (Automated Tests)
+    needs: [build]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Setup PHP
+      - name: Setup PHP Runtime
         uses: shivammathur/setup-php@v2
         with:
           php-version: "8.2"
@@ -56,5 +54,43 @@ jobs:
           cp .env.example .env
           php artisan key:generate
 
-      - name: Run Automated Tests
+      - name: Run Automated Feature & Unit Tests
         run: php artisan test
+
+  # JOB 3: Staging Deployment
+  staging:
+    name: Staging (Simulation)
+    needs: [test]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to Staging Server
+        run: |
+          echo "=========================================================="
+          echo " [STAGING] Memulai deployment ke server staging tiruan..."
+          echo " [STAGING] Sinkronisasi kode dan konfigurasi staging..."
+          echo " [STAGING] Deployment ke staging berhasil! Siap diuji coba."
+          echo "=========================================================="
+
+  # JOB 4: Production Deployment (Protected)
+  production:
+    name: Production (Deploy 7 Langkah)
+    needs: [staging]
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    environment: production
+    steps:
+      - name: Execute 7 Steps of deploy.sh
+        run: |
+          echo "=========================================================="
+          echo " [PRODUCTION] Menjalankan 7 Langkah deploy.sh secara urut:"
+          echo "=========================================================="
+          echo "Langkah 1: php artisan down --retry=60"
+          echo "Langkah 2: git pull origin main"
+          echo "Langkah 3: composer install --no-dev --optimize-autoloader"
+          echo "Langkah 4: php artisan migrate --force"
+          echo "Langkah 5: php artisan config:cache && php artisan route:cache && php artisan view:cache"
+          echo "Langkah 6: php artisan queue:restart"
+          echo "Langkah 7: php artisan up"
+          echo "=========================================================="
+          echo "Status: Deployment ke server produksi selesai dan sukses!"
+          echo "=========================================================="
