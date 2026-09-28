@@ -10,7 +10,7 @@ import {
 describe('taskHelper - Pure Logic Unit Tests', () => {
   it('harus memformat status badge dengan benar sesuai status is_completed', () => {
     const selesai = formatStatusBadge(true)
-    expect(selesai.label).toBe('Selesai')
+    expect(selesai.label).toBe('Selesai SALAH')
     expect(selesai.badgeClass).toContain('bg-success')
 
     const pending = formatStatusBadge(false)
