@@ -1,0 +1,31 @@
+# Dependensi lokal (wajib dikecualikan agar tidak mengotori image)
+/vendor
+/node_modules
+/frontend/node_modules
+/frontend/dist
+
+# Berkas rahasia dan konfigurasi lingkungan
+.env
+.env.backup
+.env.production
+*.env
+
+# Sistem kontrol versi Git
+.git
+.gitignore
+.gitattributes
+
+# Berkas pengujian dan cache sementara
+.phpunit.cache
+.phpunit.result.cache
+bootstrap/cache/*.php
+storage/logs/*
+storage/framework/cache/*
+storage/framework/sessions/*
+storage/framework/views/*
+
+# Editor dan metadata OS
+.idea
+.vscode
+*.DS_Store
+Thumbs.db
