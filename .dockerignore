@@ -1,22 +1,28 @@
 # Dependensi lokal (wajib dikecualikan agar tidak mengotori image)
-/vendor
-/node_modules
-/frontend/node_modules
-/frontend/dist
+vendor/
+node_modules/
+frontend/
 
-# Berkas rahasia dan konfigurasi lingkungan
+# Berkas rahasia dan konfigurasi lingkungan (kecualikan file environment, tapi izinkan .env.example sebagai template)
 .env
 .env.backup
 .env.production
+.env.local
 *.env
+!.env.example
 
 # Sistem kontrol versi Git
-.git
+.git/
+.github/
 .gitignore
 .gitattributes
 
-# Berkas pengujian dan cache sementara
-.phpunit.cache
+# Berkas pengujian dan dokumentasi
+tests/
+*.md
+
+# Berkas cache sementara
+.phpunit.cache/
 .phpunit.result.cache
 bootstrap/cache/*.php
 storage/logs/*
@@ -25,7 +31,7 @@ storage/framework/sessions/*
 storage/framework/views/*
 
 # Editor dan metadata OS
-.idea
-.vscode
+.idea/
+.vscode/
 *.DS_Store
 Thumbs.db

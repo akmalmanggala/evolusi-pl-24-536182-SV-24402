@@ -64,4 +64,18 @@ class TaskApiTest extends TestCase
             'title' => 'Tugas Baru dari API',
         ]);
     }
+
+    public function test_can_check_health_endpoint(): void
+    {
+        $response = $this->getJson('/api/health');
+
+        $response->assertStatus(200)
+            ->assertJson([
+                'status' => 'healthy',
+            ])
+            ->assertJsonStructure([
+                'status',
+                'timestamp',
+            ]);
+    }
 }
